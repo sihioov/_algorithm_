@@ -7,7 +7,7 @@
 
 void swap(int* x, int* y);
 void Quicksort(int* arry, int start, int end, int size);
-int Sort(int* arry, int start, int end, int size);
+int Sort(int* arry, int start, int end);
 int BreakCheck(int* arry, int Pivot, int start, int end);
 
 using namespace std;
@@ -40,12 +40,12 @@ void Quicksort(int* arry, int start, int end, int size)
     if (start >= end)
         return;
     cout << "Before ";
-    for (int i = 0; i < size; i++)
+    for (int i = 0; i < 10; i++)
         cout << arry[i] << " ";
 
-    int NextPivotIndex = Sort(arry, start, end, size);
+    int NextPivotIndex = Sort(arry, start, end);
     cout << "After ";
-    for (int i = 0; i < size; i++)
+    for (int i = 0; i < 10; i++)
         cout << arry[i] << " ";
 
     cout << "Pivot : " << NextPivotIndex;
@@ -53,69 +53,66 @@ void Quicksort(int* arry, int start, int end, int size)
 
     
     
-    //Quicksort(arry, start, NextPivotIndex, NextPivotIndex - start + 1);
+    Quicksort(arry, start, NextPivotIndex, NextPivotIndex - start + 1);
     Quicksort(arry, NextPivotIndex + 1, end, end - NextPivotIndex );
     
     
 }
 
-int Sort(int* arry, int start, int end, int size)
+int Sort(int* arry, int start, int end)
 {
     
-    size = 10;
-    int* result = new int[size];
-    memcpy(result, arry, sizeof(int) * size);
-    int Pivot = result[start];
+    
+    //int* result = new int[size];
+    //memcpy(result, arry, sizeof(int) * size);
+    int Pivot = arry[start];
     int status = 0;
     while (1)
     {
         // Check
-        if (BreakCheck(result, Pivot, start, end))
+        if (BreakCheck(arry, Pivot, start, end))
             break;
         
         // Left
         if (status == 0)
         {
-            if (Pivot <= result[end])
+            if (Pivot <= arry[end])
             {
                 end -= 1;
                 continue;
             }
-            else if (Pivot > result[end])
+            else if (Pivot > arry[end])
             {
-                result[start] = result[end];
+                arry[start] = arry[end];
                 start += 1;
                 status = 1;
             }
         }        
 
         // Check
-        if (BreakCheck(result, Pivot, start, end))
+        if (BreakCheck(arry, Pivot, start, end))
             break;
 
         // Right
         if (status == 1)
         {
-            if (Pivot >= result[start])
+            if (Pivot >= arry[start])
             {
                 start += 1;
                 continue;
             }
-            else if (Pivot < result[start])
+            else if (Pivot < arry[start])
             {
 
-                result[end] = result[start];
+                arry[end] = arry[start];
                 end -= 1;
                 status = 0;
             }
         }
-       
-        
-
     }
    
-    memcpy(arry, result, sizeof(int) * size);
-    delete result;
+    /*memcpy(arry, result, sizeof(int) * size);
+    delete[] result;*/
     return start;
 }
 
