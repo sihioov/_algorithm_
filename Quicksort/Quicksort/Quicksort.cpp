@@ -3,60 +3,132 @@
 
 #include <iostream>
 
+#define MAX_SIZE 10
+
 void swap(int* x, int* y);
-void Quicksort(int* arry, int size);
+void Quicksort(int* arry, int start, int end, int size);
+int Sort(int* arry, int start, int end, int size);
+int BreakCheck(int* arry, int Pivot, int start, int end);
+
 using namespace std;
 
 int main()
 {
-    int exArry[10] = { 3, 9, 4, 7, 5, 0, 1, 6, 8, 2 };
-    Quicksort(exArry, 10);
-    for (int i = 0; i < 10; i++)
+
+    int exArry[MAX_SIZE] = { 3, 9, 4, 7, 5, 0, 1, 6, 8, 2 };
+    int exArry2[8] = { 4,3,7,5,2,8,1,6};
+
+    /*int a = Sort(exArry, 0, MAX_SIZE - 1, MAX_SIZE);
+    cout << a << endl;*/
+
+    Quicksort(exArry, 0, 9, MAX_SIZE);
+    
+    for (int i = 0; i < MAX_SIZE; i++)
         cout << exArry[i] << " ";
-        
+
+
+    //Sort(exArry2, 0, 7, 8);
+    //for (int i = 0; i < 8; i++)
+    //    cout << exArry2[i] << " ";
+
+
 }
 
 
-void Quicksort(int* arry, int size)
+void Quicksort(int* arry, int start, int end, int size)
 {
-    int PivotIndex = size / 2 -1;
+    if (start >= end)
+        return;
+    cout << "Before ";
+    for (int i = 0; i < size; i++)
+        cout << arry[i] << " ";
 
-    int start = -1;
-    int end = size;
+    int NextPivotIndex = Sort(arry, start, end, size);
+    cout << "After ";
+    for (int i = 0; i < size; i++)
+        cout << arry[i] << " ";
 
+    cout << "Pivot : " << NextPivotIndex;
+    cout << endl;
+
+    
+    
+    //Quicksort(arry, start, NextPivotIndex, NextPivotIndex - start + 1);
+    Quicksort(arry, NextPivotIndex + 1, end, end - NextPivotIndex );
+    
+    
+}
+
+int Sort(int* arry, int start, int end, int size)
+{
+    
+    size = 10;
     int* result = new int[size];
     memcpy(result, arry, sizeof(int) * size);
-    
-    
-
-    for (int i = 0; i < PivotIndex; i++)
+    int Pivot = result[start];
+    int status = 0;
+    while (1)
     {
-        if (arry[PivotIndex] < arry[i])
+        // Check
+        if (BreakCheck(result, Pivot, start, end))
+            break;
+        
+        // Left
+        if (status == 0)
         {
-            //start = i;
-            for (int j = end; j > PivotIndex; j--)
+            if (Pivot <= result[end])
             {
-                if (arry[PivotIndex] > arry[j])
-                {
-                    swap(&arry[i], &arry[j]);
-                    end = j;
-                }
+                end -= 1;
+                continue;
+            }
+            else if (Pivot > result[end])
+            {
+                result[start] = result[end];
+                start += 1;
+                status = 1;
+            }
+        }        
+
+        // Check
+        if (BreakCheck(result, Pivot, start, end))
+            break;
+
+        // Right
+        if (status == 1)
+        {
+            if (Pivot >= result[start])
+            {
+                start += 1;
+                continue;
+            }
+            else if (Pivot < result[start])
+            {
+
+                result[end] = result[start];
+                end -= 1;
+                status = 0;
             }
         }
-
-        /*if (start != -1 && end != -1)
-        {
-            swap(&result[start], &result[end]);
-        }*/
+       
         
+
     }
-
-
-    // Left sort
-
-    // Right sort
-
+   
+    memcpy(arry, result, sizeof(int) * size);
+    delete result;
+    return start;
 }
+
+int BreakCheck(int* arry, int Pivot, int start, int end)
+{
+    if (start == end)
+    {
+        arry[start] = Pivot;
+        return 1;
+    }
+    return 0;
+}
+
 
 void swap(int* x, int* y)
 {
