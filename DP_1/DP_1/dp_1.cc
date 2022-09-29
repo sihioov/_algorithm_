@@ -39,14 +39,20 @@ void PSPacking()
     std::vector<int> v(stuff_number);
     std::shared_ptr<Stuff> stuff = std::make_shared<Stuff>();
     //Stuff a;
-    
+    int _stuff_weight;
+    int _stuff_value;
+    stuff->SetWeightCapacity(capacity_weight);
     for (int i = 0; i<stuff_number; i++)
     {
         //std::cout << "size : " << v.size() << std::endl;
-        std::cout << "Input stuff num & weight" << std::endl;
+        std::cout << "Input stuff num & weight number" << i+1 <<std::endl;
+        std::cin >> _stuff_weight;
+        std::cin >> _stuff_value;
+        stuff->SetStuff(_stuff_weight, _stuff_value);
+        
     }
-    
-
+    stuff->OptimizateStuff();
+    std::cout << "result : " << stuff->GetMaxValue() << std::endl;
 }
 
 int main()
